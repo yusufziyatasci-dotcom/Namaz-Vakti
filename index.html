@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Namaz Vakitleri</title>
+<meta name="theme-color" content="#137f86">
+<meta name="description" content="Namaz vakitleri, kıble pusulası ve günün âyet, hadis ve duası">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<style>
+@font-face{font-family:'Amiri Quran';font-weight:400;font-display:swap;src:url(fonts/amiri-quran-arabic-400-normal.woff2) format('woff2')}
+@font-face{font-family:'Amiri';font-weight:400;font-display:swap;src:url(fonts/amiri-arabic-400-normal.woff2) format('woff2')}
+@font-face { font-family: 'Marcellus'; font-style: normal; font-display: swap; font-weight: 400; src:url(fonts/marcellus-latin-ext-400-normal.woff2) format('woff2'); unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+@font-face { font-family: 'Marcellus'; font-style: normal; font-display: swap; font-weight: 400; src:url(fonts/marcellus-latin-400-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+@font-face { font-family: 'Inter'; font-style: normal; font-display: swap; font-weight: 400; src:url(fonts/inter-latin-ext-400-normal.woff2) format('woff2'); unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+@font-face { font-family: 'Inter'; font-style: normal; font-display: swap; font-weight: 400; src:url(fonts/inter-latin-400-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+@font-face { font-family: 'Inter'; font-style: normal; font-display: swap; font-weight: 500; src:url(fonts/inter-latin-ext-500-normal.woff2) format('woff2'); unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+@font-face { font-family: 'Inter'; font-style: normal; font-display: swap; font-weight: 500; src:url(fonts/inter-latin-500-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+@font-face { font-family: 'Inter'; font-style: normal; font-display: swap; font-weight: 600; src:url(fonts/inter-latin-ext-600-normal.woff2) format('woff2'); unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF; }
+@font-face { font-family: 'Inter'; font-style: normal; font-display: swap; font-weight: 600; src:url(fonts/inter-latin-600-normal.woff2) format('woff2'); unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD; }
+/* VOICE: sakin, sade, saygılı; az renk, bol hava
+   IDEA: cami duvarındaki vakit çizelgesi + İznik çinisi; günün sayfası bir mushaf sayfası gibi
+   PICTURE: geri sayım; asılı saatlerle vakit listesi; kıble için pusula kadranı
+   COLOUR and TYPE: çini turkuazı, beyaz, kobalt-lacivert yazı, İznik kırmızısı tek vurgu; Marcellus + Inter + Amiri Quran
+   LAYOUT: tek sütun; başlık bandı, üç sekme, içerik */
+:root{color-scheme:light dark;
+--bg:light-dark(#ffffff,#0c1b22);--ink:light-dark(#10283a,#e8f1f2);--mute:light-dark(#5a6d78,#9db3ba);
+--tile:light-dark(#137f86,#0f5f66);--line:light-dark(#e3eaec,#1e333c);--now:light-dark(#e8f5f5,#123139);
+--red:light-dark(#c2362b,#ff7a6b);--card:light-dark(#ffffff,#10252d);--soft:light-dark(#f4f9f9,#0f232a);--acc:light-dark(#137f86,#5fc4ca)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,sans-serif;overflow-x:clip}
+.band{padding:clamp(20px,4vw,40px) max(5vw,16px)}
+.wrap{max-width:560px;margin:0 auto}
+header.band{background-color:var(--tile);color:#fff;padding-bottom:22px;
+background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='.10' stroke-width='1.2'%3E%3Crect x='16' y='16' width='24' height='24'/%3E%3Crect x='16' y='16' width='24' height='24' transform='rotate(45 28 28)'/%3E%3Ccircle cx='28' cy='28' r='5'/%3E%3C/g%3E%3C/svg%3E")}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.city{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:8px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.45);background:rgba(255,255,255,.12);color:#fff;font:600 17px Inter,sans-serif;cursor:pointer;max-width:100%}
+.city span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.city svg{width:14px;height:14px;flex:none}
+.dates{text-align:right;font-size:14px;line-height:1.35;opacity:.92}
+.chip{display:inline-block;margin-top:14px;padding:5px 12px;border-radius:999px;background:#fff;color:#0f5f66;font:600 13px Inter,sans-serif}
+.next{margin-top:clamp(14px,3vw,28px);text-align:center}
+.next .lbl{font-size:16px;opacity:.9}
+.count{font:400 clamp(52px,15vw,84px)/1.05 Marcellus,Georgia,serif;letter-spacing:.02em;font-variant-numeric:tabular-nums;white-space:nowrap;margin:6px 0 4px}
+.next .at{font-size:15px;opacity:.85}
+nav.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;padding:4px;margin:0 auto;max-width:560px;background:var(--soft);border-radius:14px}
+.tabsband{padding:14px max(5vw,16px) 0;position:sticky;top:0;z-index:5;background:var(--bg)}
+nav.tabs button{min-height:44px;border:0;border-radius:10px;background:none;color:var(--mute);font:600 15px Inter,sans-serif;cursor:pointer}
+nav.tabs button[aria-selected=true]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+main.band{padding-top:18px}
+.daynav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.daynav h2{font:400 22px/1.2 Marcellus,Georgia,serif;margin:0;text-align:center;flex:1}
+.ib{width:44px;height:44px;flex:none;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;font-size:20px;line-height:1}
+.ib:hover{border-color:var(--tile)}
+.today{display:block;margin:0 auto 12px;min-height:36px;padding:4px 14px;border-radius:999px;border:0;background:none;color:var(--acc);font:600 14px Inter,sans-serif;cursor:pointer}
+ol.times{list-style:none;margin:0;padding:0}
+ol.times li{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);border-radius:12px}
+ol.times li:last-child{border-bottom:0}
+ol.times .t{font:400 34px/1 Marcellus,Georgia,serif;font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+ol.times .n{font-size:18px;font-weight:500}
+ol.times .s{display:block;font-size:13px;color:var(--mute);font-weight:400}
+ol.times li.cur{background:var(--now);border-bottom-color:transparent}
+ol.times li.cur .n::after{content:"Şimdi";margin-inline-start:10px;padding:2px 8px;border-radius:999px;background:var(--red);color:#fff;font-size:12px;font-weight:600;vertical-align:2px}
+ol.times li.past{color:var(--mute)}
+.note{font-size:13px;color:var(--mute);text-align:center;padding-top:8px;margin:8px 0 0}
+/* günün */
+.occ{border-radius:16px;background:var(--tile);color:#fff;padding:18px 18px 16px;margin-bottom:14px}
+.occ h3{margin:0;font:400 24px/1.2 Marcellus,Georgia,serif}
+.occ p{margin:6px 0 0;font-size:15px;opacity:.92}
+.occ:empty{display:none}
+.card{border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px;background:var(--card)}
+.card .k{font:600 13px Inter,sans-serif;color:var(--acc);margin:0 0 10px}
+.ar{direction:rtl;text-align:right;font:26px/2.05 "Amiri Quran",Amiri,"Noto Naskh Arabic",serif;margin:0 0 12px;overflow-wrap:break-word}
+.ar.h{font-family:Amiri,"Noto Naskh Arabic",serif;font-size:23px;line-height:1.9}
+.ok{font-style:italic;color:var(--mute);margin:0 0 10px;font-size:15px}
+.mean{margin:0;font-size:17px;line-height:1.6}
+.src{margin:10px 0 0;font-size:13px;color:var(--mute)}
+.src b{font-weight:600;color:var(--ink)}
+/* kıble */
+.dialwrap{display:grid;place-items:center;padding:6px 0 4px}
+.dial{width:min(300px,84vw);aspect-ratio:1}
+.dial svg{width:100%;height:100%;display:block}
+#rose{transition:transform .25s ease-out}
+.qbig{text-align:center;margin:4px 0 2px;font:400 46px/1.1 Marcellus,Georgia,serif;font-variant-numeric:tabular-nums}
+.qsub{text-align:center;color:var(--mute);margin:0 0 14px;font-size:15px}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0 0 14px}
+.fact{background:var(--soft);border-radius:14px;padding:12px 14px}
+.fact .v{font:400 26px/1.15 Marcellus,Georgia,serif;white-space:nowrap}
+.fact .l{font-size:13px;color:var(--mute)}
+.btn{width:100%;min-height:46px;border:0;border-radius:12px;background:var(--tile);color:#fff;font:600 16px Inter,sans-serif;cursor:pointer}
+.btn.ghost{background:none;border:1px solid var(--line);color:var(--ink);display:flex;align-items:center;justify-content:center;gap:8px}
+.btn svg{width:18px;height:18px}
+.msg{font-size:14px;color:var(--mute);margin:8px 0 0;min-height:1em}
+.ok-q #needle line{stroke:#2e9d5b}.qstate{text-align:center;font-weight:600;color:#2e9d5b;margin:0 0 10px;min-height:1.4em}
+.how{font-size:15px;margin:14px 0 0;padding-inline-start:20px}
+.how li{margin:4px 0}
+/* sheet */
+.sheet{position:fixed;inset:0;background:rgba(5,15,20,.5);display:none;align-items:flex-end;justify-content:center;z-index:9}
+.sheet.open{display:flex}
+.panel{background:var(--bg);color:var(--ink);width:100%;max-width:560px;max-height:88vh;display:flex;flex-direction:column;border-radius:18px 18px 0 0;padding:16px}
+@media(min-width:620px){.sheet{align-items:center}.panel{border-radius:18px;max-height:84vh}}
+.ph{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.ph h3{margin:0;font:400 22px Marcellus,Georgia,serif}
+input{font:16px Inter,sans-serif;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px;width:100%}
+input:focus-visible,button:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.list{overflow-y:auto;margin:10px 0;padding:0;list-style:none;flex:1}
+.list button{width:100%;text-align:left;min-height:44px;padding:10px 12px;border:0;border-bottom:1px solid var(--line);background:none;color:var(--ink);font:16px Inter,sans-serif;cursor:pointer}
+.list button:hover,.list button.sel{background:var(--now)}
+.list .empty{padding:14px 12px;color:var(--mute)}
+details{border-top:1px solid var(--line);padding-top:10px}
+summary{cursor:pointer;min-height:36px;font-weight:500}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:8px}
+.grid label,.lab{font-size:13px;color:var(--mute)}
+.err{color:var(--red);font-size:13px;min-height:1em;margin:6px 0 0}
+[hidden]{display:none!important}
+@media (prefers-reduced-motion:no-preference){.panel{animation:up .22s ease-out}@keyframes up{from{transform:translateY(16px);opacity:0}}}
+@media (prefers-reduced-motion:reduce){#rose{transition:none}}
+</style>
+</head>
+<body>
+<header class="band">
+  <div class="wrap">
+    <div class="top">
+      <button class="city" id="cityBtn" aria-haspopup="dialog"><span id="cityName">İstanbul</span>
+        <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></button>
+      <div class="dates"><div id="gDate"></div><div id="hDate"></div></div>
+    </div>
+    <div style="text-align:center"><span class="chip" id="chip" hidden></span></div>
+    <div class="next" aria-live="polite">
+      <div class="lbl" id="nextLbl">&nbsp;</div>
+      <div class="count" id="count">--:--:--</div>
+      <div class="at" id="nextAt">&nbsp;</div>
+    </div>
+  </div>
+</header>
+
+<div class="tabsband"><nav class="tabs" role="tablist" aria-label="Bölümler">
+  <button role="tab" id="t-vakit" aria-selected="true" aria-controls="p-vakit">Vakitler</button>
+  <button role="tab" id="t-gun" aria-selected="false" aria-controls="p-gun">Günün</button>
+  <button role="tab" id="t-kible" aria-selected="false" aria-controls="p-kible">Kıble</button>
+</nav></div>
+
+<main class="band">
+  <div class="wrap">
+    <div class="daynav" id="daynav">
+      <button class="ib" id="prev" aria-label="Önceki gün">‹</button>
+      <h2 id="dayTitle">Bugün</h2>
+      <button class="ib" id="nextDay" aria-label="Sonraki gün">›</button>
+    </div>
+    <button class="today" id="toToday" hidden>Bugüne dön</button>
+
+    <section id="p-vakit" role="tabpanel" aria-labelledby="t-vakit">
+      <ol class="times" id="times"></ol>
+      <p class="note">Vakitler Diyanet yöntemiyle (fecir 18°, yatsı 17°, temkin dakikaları dâhil) hesaplanır; resmî takvimle 1–2 dakika fark olabilir.</p>
+    </section>
+
+    <section id="p-gun" role="tabpanel" aria-labelledby="t-gun" hidden>
+      <div class="occ" id="occ"></div>
+      <article class="card"><p class="k">Âyet-i Kerîme</p><p class="ar" id="aAr"></p><p class="mean" id="aTr"></p><p class="src" id="aRef"></p></article>
+      <article class="card"><p class="k">Hadîs-i Şerîf</p><p class="mean" id="hTr"></p><p class="src" id="hSrc"></p></article>
+      <article class="card"><p class="k">Dua</p><p class="ar h" id="dAr"></p><p class="ok" id="dOk"></p><p class="mean" id="dTr"></p><p class="src" id="dSrc"></p></article>
+      <p class="note">Âyet metinleri Tanzil Uthmani metninden, hadisler Buhârî, Müslim ve Tirmizî'nin standart numaralarıyla verilmiştir. Mealler anlamı aktaran sade çevirilerdir. Dini günler 2026–2027 için Diyanet takvimine göredir.</p>
+    </section>
+
+    <section id="p-kible" role="tabpanel" aria-labelledby="t-kible" hidden>
+      <div class="dialwrap"><div class="dial">
+        <svg viewBox="-150 -150 300 300" role="img" aria-labelledby="dialT"><title id="dialT">Kıble pusulası</title>
+          <g id="rose">
+            <circle r="138" fill="var(--soft)" stroke="var(--line)" stroke-width="2"/>
+            <g id="ticks"></g>
+            <text y="-90" text-anchor="middle" font-family="Inter" font-weight="600" font-size="18" fill="var(--red)">K</text>
+            <text x="98" y="6" text-anchor="middle" font-family="Inter" font-weight="600" font-size="16" fill="var(--mute)">D</text>
+            <text y="104" text-anchor="middle" font-family="Inter" font-weight="600" font-size="16" fill="var(--mute)">G</text>
+            <text x="-98" y="6" text-anchor="middle" font-family="Inter" font-weight="600" font-size="16" fill="var(--mute)">B</text>
+            <g id="needle">
+              <line x1="0" y1="0" x2="0" y2="-92" stroke="var(--tile)" stroke-width="6" stroke-linecap="round"/>
+              <g transform="translate(0,-104)"><rect x="-13" y="-13" width="26" height="26" rx="3" fill="#10283a" stroke="#fff" stroke-width="1.5"/><rect x="-13" y="-6" width="26" height="4" fill="#d4a93a"/></g>
+            </g>
+          </g>
+          <circle r="7" fill="var(--tile)" stroke="#fff" stroke-width="2"/>
+          <path id="phoneMark" d="M0,-146 L-7,-134 L7,-134 Z" fill="var(--red)" hidden/>
+        </svg>
+      </div></div>
+      <p class="qbig" id="qDeg">—</p>
+      <p class="qsub" id="qSub">Kuzeyden saat yönünde</p>
+      <p class="qstate" id="qState" aria-live="polite"></p>
+      <div class="facts">
+        <div class="fact"><div class="v" id="qTime">—</div><div class="l">Kıble saati (güneş kıble yönünde)</div></div>
+        <div class="fact"><div class="v" id="qDist">—</div><div class="l">Kâbe'ye uzaklık</div></div>
+      </div>
+      <button class="btn ghost" id="liveBtn" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 5l3 7h-6z" fill="currentColor"/></svg>Pusulayı başlat</button>
+      <p class="msg" id="liveMsg"></p>
+      <ol class="how" id="how"></ol>
+    </section>
+  </div>
+</main>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="panel">
+    <div class="ph"><h3 id="sheetTitle">Konum seç</h3><button class="ib" id="close" aria-label="Kapat">×</button></div>
+    <button class="btn ghost" id="geoBtn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z" fill="currentColor"/></svg>Konumumu kullan</button>
+    <p class="msg" id="geoMsg"></p>
+    <input id="q" type="search" placeholder="Şehir ara…" autocomplete="off" aria-label="Şehir ara" style="margin-top:8px">
+    <ul class="list" id="list"></ul>
+    <details>
+      <summary>Listede yok mu? Koordinat gir</summary>
+      <div class="grid">
+        <div><label for="cLat">Enlem</label><input id="cLat" inputmode="decimal" placeholder="41.01"></div>
+        <div><label for="cLng">Boylam</label><input id="cLng" inputmode="decimal" placeholder="28.98"></div>
+        <div><label for="cTz">UTC farkı</label><input id="cTz" inputmode="decimal" placeholder="3"></div>
+      </div>
+      <div style="margin-top:8px"><label class="lab" for="cName">Ad</label><input id="cName" placeholder="Örn. Berlin"></div>
+      <p class="err" id="cErr"></p>
+      <button class="btn" id="cGo">Bu konumu kullan</button>
+    </details>
+  </div>
+</div>
+
+<script type="application/json" id="content">{"S": {"cuma": {"t": "Cuma", "n": "Haftanın bayramı; cuma namazı günü.", "a": {"ar": "يَـٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوٓاْ إِذَا نُودِيَ لِلصَّلَوٰةِ مِن يَوۡمِ ٱلۡجُمُعَةِ فَٱسۡعَوۡاْ إِلَىٰ ذِكۡرِ ٱللَّهِ وَذَرُواْ ٱلۡبَيۡعَۚ ذَٰلِكُمۡ خَيۡرٞ لَّكُمۡ إِن كُنتُمۡ تَعۡلَمُونَ ۝٩", "tr": "Ey iman edenler! Cuma günü namaz için çağrı yapıldığında Allah'ı anmaya koşun ve alışverişi bırakın. Eğer bilirseniz bu sizin için daha hayırlıdır.", "ref": "Cuma 62/9"}, "h": {"tr": "Üzerine güneşin doğduğu en hayırlı gün cuma günüdür. Âdem o gün yaratıldı, o gün cennete konuldu ve o gün oradan çıkarıldı. Kıyamet de ancak cuma günü kopacaktır.", "src": "Müslim, Cuma, 854", "rav": "Ebû Hüreyre"}, "d": {"ar": "رَبَّنَآ ءَاتِنَا فِي ٱلدُّنۡيَا حَسَنَةٗ وَفِي ٱلۡأٓخِرَةِ حَسَنَةٗ وَقِنَا عَذَابَ ٱلنَّارِ ۝٢٠١", "ok": "Rabbenâ âtinâ fi'd-dünyâ haseneten ve fi'l-âhireti haseneten ve kınâ azâbe'n-nâr.", "tr": "Rabbimiz! Bize dünyada da iyilik ver, ahirette de iyilik ver ve bizi ateş azabından koru.", "src": "Bakara 2/201 · Hz. Peygamber'in en çok yaptığı dua (Buhârî, Daavât, 6389)"}}, "pzt": {"t": "Pazartesi", "n": "Hz. Peygamber'in doğduğu ve kendisine vahyin indirildiği gün.", "a": {"ar": "لَّقَدۡ كَانَ لَكُمۡ فِي رَسُولِ ٱللَّهِ أُسۡوَةٌ حَسَنَةٞ لِّمَن كَانَ يَرۡجُواْ ٱللَّهَ وَٱلۡيَوۡمَ ٱلۡأٓخِرَ وَذَكَرَ ٱللَّهَ كَثِيرٗا ۝٢١", "tr": "Andolsun ki Allah'ın Resûlü'nde sizin için, Allah'a ve ahiret gününe kavuşmayı uman ve Allah'ı çokça anan kimseler için güzel bir örnek vardır.", "ref": "Ahzâb 33/21"}, "h": {"tr": "Resûlullah'a pazartesi günü orucu soruldu. Şöyle buyurdu: “O, doğduğum ve peygamber olarak gönderildiğim (yahut bana vahyin indirildiği) gündür.”", "src": "Müslim, Sıyâm, 1162", "rav": "Ebû Katâde el-Ensârî"}, "d": {"ar": "رَبَّنَا لَا تُزِغۡ قُلُوبَنَا بَعۡدَ إِذۡ هَدَيۡتَنَا وَهَبۡ لَنَا مِن لَّدُنكَ رَحۡمَةًۚ إِنَّكَ أَنتَ ٱلۡوَهَّابُ ۝٨", "ok": "Rabbenâ lâ tüziğ kulûbenâ ba'de iz hedeytenâ ve heb lenâ min ledünke rahmeh, inneke ente'l-vehhâb.", "tr": "Rabbimiz! Bizi doğru yola ilettikten sonra kalplerimizi kaydırma; katından bize rahmet bağışla. Şüphesiz bağışı en bol olan Sensin.", "src": "Âl-i İmrân 3/8"}}, "prs": {"t": "Perşembe", "n": "Cennet kapılarının açıldığı bildirilen iki günden biri.", "a": {"ar": "وَلَا تَسۡتَوِي ٱلۡحَسَنَةُ وَلَا ٱلسَّيِّئَةُۚ ٱدۡفَعۡ بِٱلَّتِي هِيَ أَحۡسَنُ فَإِذَا ٱلَّذِي بَيۡنَكَ وَبَيۡنَهُۥ عَدَٰوَةٞ كَأَنَّهُۥ وَلِيٌّ حَمِيمٞ ۝٣٤", "tr": "İyilikle kötülük bir olmaz. Sen kötülüğü en güzel olanla sav. O zaman seninle arasında düşmanlık bulunan kimse, sanki candan bir dost oluverir.", "ref": "Fussilet 41/34"}, "h": {"tr": "Cennet kapıları pazartesi ve perşembe günleri açılır. Allah'a hiçbir şeyi ortak koşmayan her kul bağışlanır; ancak kardeşiyle arasında kin bulunan kimse müstesna. “Bu ikisi barışıncaya kadar bekletin” denilir.", "src": "Müslim, Birr, 2565", "rav": "Ebû Hüreyre"}, "d": {"ar": "رَبَّنَا ٱغۡفِرۡ لَنَا وَلِإِخۡوَٰنِنَا ٱلَّذِينَ سَبَقُونَا بِٱلۡإِيمَٰنِ وَلَا تَجۡعَلۡ فِي قُلُوبِنَا غِلّٗا لِّلَّذِينَ ءَامَنُواْ رَبَّنَآ إِنَّكَ رَءُوفٞ رَّحِيمٌ ۝١٠", "ok": "Rabbenağfir lenâ ve li-ihvânine'llezîne sebekûnâ bi'l-îmân, ve lâ tec'al fî kulûbinâ ğıllen li'llezîne âmenû, Rabbenâ inneke raûfün rahîm.", "tr": "Rabbimiz! Bizi ve bizden önce iman etmiş kardeşlerimizi bağışla. Kalplerimizde iman edenlere karşı hiçbir kin bırakma. Rabbimiz! Şüphesiz Sen çok şefkatlisin, çok merhametlisin.", "src": "Haşr 59/10"}}, "regaib": {"t": "Regaib Kandili", "n": "Üç aylar başladı. Receb, Kur'an'da bildirilen dört haram aydan biridir. Bu gece Regaib Kandili.", "a": {"ar": "إِنَّ عِدَّةَ ٱلشُّهُورِ عِندَ ٱللَّهِ ٱثۡنَا عَشَرَ شَهۡرٗا فِي كِتَٰبِ ٱللَّهِ يَوۡمَ خَلَقَ ٱلسَّمَٰوَٰتِ وَٱلۡأَرۡضَ مِنۡهَآ أَرۡبَعَةٌ حُرُمٞۚ ذَٰلِكَ ٱلدِّينُ ٱلۡقَيِّمُۚ فَلَا تَظۡلِمُواْ فِيهِنَّ أَنفُسَكُمۡ", "tr": "Allah katında ayların sayısı, gökleri ve yeri yarattığı gündeki yazısında on ikidir. Bunlardan dördü haram (hürmetli) aylardır. İşte dosdoğru din budur. O aylarda kendinize zulmetmeyin.", "ref": "Tevbe 9/36"}, "h": {"tr": "Zaman, Allah'ın gökleri ve yeri yarattığı günkü düzenine döndü. Yıl on iki aydır; bunlardan dördü haram aylardır. Üçü art arda gelir: Zilkade, Zilhicce ve Muharrem. Dördüncüsü, Cemâziyelâhir ile Şâban arasındaki Mudar'ın Receb'idir.", "src": "Buhârî, Tefsîr, 4662; Müslim, Kasâme, 1679", "rav": "Ebû Bekre"}, "d": {"ar": "رَبَّنَا فَٱغۡفِرۡ لَنَا ذُنُوبَنَا وَكَفِّرۡ عَنَّا سَيِّـَٔاتِنَا وَتَوَفَّنَا مَعَ ٱلۡأَبۡرَارِ ۝١٩٣", "ok": "Rabbenâ fağfir lenâ zünûbenâ ve keffir annâ seyyiâtinâ ve teveffenâ mea'l-ebrâr.", "tr": "Rabbimiz! Günahlarımızı bağışla, kötülüklerimizi ört ve canımızı iyilerle birlikte al.", "src": "Âl-i İmrân 3/193"}}, "ucaylar": {"t": "Üç Aylar", "n": "Receb ayı ve üç aylar bugün başlıyor. Receb, Kur'an'da bildirilen dört haram aydan biridir.", "a": {"ar": "إِنَّ عِدَّةَ ٱلشُّهُورِ عِندَ ٱللَّهِ ٱثۡنَا عَشَرَ شَهۡرٗا فِي كِتَٰبِ ٱللَّهِ يَوۡمَ خَلَقَ ٱلسَّمَٰوَٰتِ وَٱلۡأَرۡضَ مِنۡهَآ أَرۡبَعَةٌ حُرُمٞۚ ذَٰلِكَ ٱلدِّينُ ٱلۡقَيِّمُۚ فَلَا تَظۡلِمُواْ فِيهِنَّ أَنفُسَكُمۡ", "tr": "Allah katında ayların sayısı, gökleri ve yeri yarattığı gündeki yazısında on ikidir. Bunlardan dördü haram (hürmetli) aylardır. İşte dosdoğru din budur. O aylarda kendinize zulmetmeyin.", "ref": "Tevbe 9/36"}, "h": {"tr": "Zaman, Allah'ın gökleri ve yeri yarattığı günkü düzenine döndü. Yıl on iki aydır; bunlardan dördü haram aylardır. Üçü art arda gelir: Zilkade, Zilhicce ve Muharrem. Dördüncüsü, Cemâziyelâhir ile Şâban arasındaki Mudar'ın Receb'idir.", "src": "Buhârî, Tefsîr, 4662; Müslim, Kasâme, 1679", "rav": "Ebû Bekre"}, "d": {"ar": "رَبَّنَا فَٱغۡفِرۡ لَنَا ذُنُوبَنَا وَكَفِّرۡ عَنَّا سَيِّـَٔاتِنَا وَتَوَفَّنَا مَعَ ٱلۡأَبۡرَارِ ۝١٩٣", "ok": "Rabbenâ fağfir lenâ zünûbenâ ve keffir annâ seyyiâtinâ ve teveffenâ mea'l-ebrâr.", "tr": "Rabbimiz! Günahlarımızı bağışla, kötülüklerimizi ört ve canımızı iyilerle birlikte al.", "src": "Âl-i İmrân 3/193"}}, "mirac": {"t": "Miraç Kandili", "n": "Hz. Peygamber'in Mescid-i Haram'dan Mescid-i Aksâ'ya götürüldüğü (İsrâ) ve oradan göklere yükseldiği (Miraç) gece. Beş vakit namaz bu gece farz kılındı.", "a": {"ar": "سُبۡحَٰنَ ٱلَّذِيٓ أَسۡرَىٰ بِعَبۡدِهِۦ لَيۡلٗا مِّنَ ٱلۡمَسۡجِدِ ٱلۡحَرَامِ إِلَى ٱلۡمَسۡجِدِ ٱلۡأَقۡصَا ٱلَّذِي بَٰرَكۡنَا حَوۡلَهُۥ لِنُرِيَهُۥ مِنۡ ءَايَٰتِنَآۚ إِنَّهُۥ هُوَ ٱلسَّمِيعُ ٱلۡبَصِيرُ ۝١", "tr": "Kendisine âyetlerimizden bazılarını göstermek için kulunu bir gece Mescid-i Haram'dan, çevresini bereketli kıldığımız Mescid-i Aksâ'ya götüren Allah'ın şanı yücedir. Şüphesiz O, hakkıyla işitendir, hakkıyla görendir.", "ref": "İsrâ 17/1"}, "h": {"tr": "Resûlullah Miraç'a çıkarıldığında kendisine üç şey verildi: beş vakit namaz, Bakara sûresinin son âyetleri ve ümmetinden Allah'a hiçbir şeyi ortak koşmayanların büyük günahlarının bağışlanması.", "src": "Müslim, Îmân, 173", "rav": "Abdullah b. Mes'ûd"}, "d": {"ar": "رَبَّنَا لَا تُؤَاخِذۡنَآ إِن نَّسِينَآ أَوۡ أَخۡطَأۡنَاۚ رَبَّنَا وَلَا تَحۡمِلۡ عَلَيۡنَآ إِصۡرٗا كَمَا حَمَلۡتَهُۥ عَلَى ٱلَّذِينَ مِن قَبۡلِنَاۚ رَبَّنَا وَلَا تُحَمِّلۡنَا مَا لَا طَاقَةَ لَنَا بِهِۦۖ وَٱعۡفُ عَنَّا وَٱغۡفِرۡ لَنَا وَٱرۡحَمۡنَآۚ أَنتَ مَوۡلَىٰنَا فَٱنصُرۡنَا عَلَى ٱلۡقَوۡمِ ٱلۡكَٰفِرِينَ ۝٢٨٦", "ok": "Rabbenâ lâ tüâhiznâ in nesînâ ev ahta'nâ. Rabbenâ ve lâ tahmil aleynâ ısran kemâ hameltehû ale'llezîne min kablinâ. Rabbenâ ve lâ tühammilnâ mâ lâ tâkate lenâ bih. Va'fü annâ, vağfir lenâ, verhamnâ. Ente mevlânâ fensurnâ ale'l-kavmi'l-kâfirîn.", "tr": "Rabbimiz! Unutur ya da yanılırsak bizi sorumlu tutma. Rabbimiz! Bizden öncekilere yüklediğin gibi bize ağır yük yükleme. Rabbimiz! Gücümüzün yetmediği şeyi bize taşıtma. Bizi affet, bizi bağışla, bize merhamet et. Sen bizim Mevlâmızsın; kâfirler topluluğuna karşı bize yardım et.", "src": "Bakara 2/286 · Miraç'ta verilen Bakara sûresinin son âyetlerinden"}}, "berat": {"t": "Berat Kandili", "n": "Şâban ayının 15. gecesi. Tövbe, bağışlanma dileği ve duayla ihya edilen bir gece.", "a": {"ar": "قُلۡ يَٰعِبَادِيَ ٱلَّذِينَ أَسۡرَفُواْ عَلَىٰٓ أَنفُسِهِمۡ لَا تَقۡنَطُواْ مِن رَّحۡمَةِ ٱللَّهِۚ إِنَّ ٱللَّهَ يَغۡفِرُ ٱلذُّنُوبَ جَمِيعًاۚ إِنَّهُۥ هُوَ ٱلۡغَفُورُ ٱلرَّحِيمُ ۝٥٣", "tr": "De ki: Ey kendilerine karşı haddi aşan kullarım! Allah'ın rahmetinden ümidinizi kesmeyin. Şüphesiz Allah bütün günahları bağışlar. Çünkü O, çok bağışlayandır, çok merhamet edendir.", "ref": "Zümer 39/53"}, "h": {"tr": "Resûlullah'ın Ramazan dışında hiçbir ayın orucunu tamamen tuttuğunu görmedim. Şâban'dan daha çok oruç tuttuğu bir ay da görmedim.", "src": "Buhârî, Savm, 1969; Müslim, Sıyâm, 1156", "rav": "Hz. Âişe"}, "d": {"ar": "اللَّهُمَّ أَنْتَ رَبِّي، لاَ إِلَهَ إِلاَّ أَنْتَ", "ok": "Allâhümme ente Rabbî, lâ ilâhe illâ ente, halaktenî ve ene abdük, ve ene alâ ahdike ve va'dike mesteta'tü. Eûzü bike min şerri mâ sana'tü. Ebûü leke bi-ni'metike aleyye ve ebûü leke bi-zenbî, fağfir lî, fe-innehû lâ yağfiru'z-zünûbe illâ ente.", "tr": "Allah'ım! Sen benim Rabbimsin. Senden başka ilah yoktur. Beni Sen yarattın, ben de Senin kulunum. Gücüm yettiğince Sana verdiğim söz ve vaat üzereyim. Yaptıklarımın kötülüğünden Sana sığınırım. Bana verdiğin nimetleri ikrar eder, günahımı itiraf ederim. Beni bağışla; çünkü günahları Senden başka bağışlayan yoktur.", "src": "Seyyidü'l-istiğfâr · Buhârî, Daavât, 6306"}}, "kadir": {"t": "Kadir Gecesi", "n": "Kur'an'ın indirilmeye başlandığı, bin aydan hayırlı gece.", "a": {"ar": "إِنَّآ أَنزَلۡنَٰهُ فِي لَيۡلَةِ ٱلۡقَدۡرِ ۝١ وَمَآ أَدۡرَىٰكَ مَا لَيۡلَةُ ٱلۡقَدۡرِ ۝٢ لَيۡلَةُ ٱلۡقَدۡرِ خَيۡرٞ مِّنۡ أَلۡفِ شَهۡرٖ ۝٣", "tr": "Şüphesiz Biz onu (Kur'an'ı) Kadir gecesinde indirdik. Kadir gecesinin ne olduğunu sana ne bildirdi? Kadir gecesi bin aydan daha hayırlıdır.", "ref": "Kadr 97/1-3"}, "h": {"tr": "Kim faziletine inanarak ve karşılığını Allah'tan umarak Kadir gecesini ibadetle geçirirse, geçmiş günahları bağışlanır.", "src": "Buhârî, Savm, 1901; Müslim, Salâtü'l-müsâfirîn, 760", "rav": "Ebû Hüreyre"}, "d": {"ar": "اللَّهُمَّ إِنَّكَ عَفُوٌّ كَرِيمٌ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي", "ok": "Allâhümme inneke afüvvün kerîmün tühibbü'l-afve fa'fü annî.", "tr": "Allah'ım! Sen çok affedicisin, cömertsin; affetmeyi seversin. Beni de affet.", "src": "Tirmizî, Daavât, 3513 · Hz. Âişe'nin “Kadir gecesine denk gelirsem ne diyeyim?” sorusuna cevap. Tirmizî “hasen-sahih” demiştir."}}, "mevlid": {"t": "Mevlid Kandili", "n": "Hz. Muhammed'in (s.a.s.) dünyaya gelişinin yıl dönümü; Rebîülevvel ayının 12. gecesi.", "a": {"ar": "وَمَآ أَرۡسَلۡنَٰكَ إِلَّا رَحۡمَةٗ لِّلۡعَٰلَمِينَ ۝١٠٧", "tr": "(Ey Muhammed!) Biz seni ancak âlemlere rahmet olarak gönderdik.", "ref": "Enbiyâ 21/107"}, "h": {"tr": "Hiçbiriniz, ben kendisine babasından, çocuğundan ve bütün insanlardan daha sevimli olmadıkça (gerçek anlamda) iman etmiş olmaz.", "src": "Buhârî, Îmân, 15; Müslim, Îmân, 44", "rav": "Enes b. Mâlik"}, "d": {"ar": "اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ، وَعَلَى آلِ مُحَمَّدٍ، كَمَا صَلَّيْتَ عَلَى إِبْرَاهِيمَ وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ، اللَّهُمَّ بَارِكْ عَلَى مُحَمَّدٍ، وَعَلَى آلِ مُحَمَّدٍ، كَمَا بَارَكْتَ عَلَى إِبْرَاهِيمَ، وَعَلَى آلِ إِبْرَاهِيمَ، إِنَّكَ حَمِيدٌ مَجِيدٌ", "ok": "Allâhümme salli alâ Muhammedin ve alâ âli Muhammed, kemâ salleyte alâ İbrâhîme ve alâ âli İbrâhîm, inneke hamîdün mecîd. Allâhümme bârik alâ Muhammedin ve alâ âli Muhammed, kemâ bârekte alâ İbrâhîme ve alâ âli İbrâhîm, inneke hamîdün mecîd.", "tr": "Allah'ım! İbrâhim'e ve ailesine rahmet ettiğin gibi Muhammed'e ve ailesine de rahmet et. Şüphesiz Sen övülmeye layıksın, şanı yücesin. Allah'ım! İbrâhim'e ve ailesine bereket verdiğin gibi Muhammed'e ve ailesine de bereket ver. Şüphesiz Sen övülmeye layıksın, şanı yücesin.", "src": "Buhârî, Ahâdîsü'l-enbiyâ, 3370"}}, "ram1": {"t": "Ramazan", "n": "Oruç ayı; Kur'an'ın indirildiği ay.", "a": {"ar": "يَـٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُواْ كُتِبَ عَلَيۡكُمُ ٱلصِّيَامُ كَمَا كُتِبَ عَلَى ٱلَّذِينَ مِن قَبۡلِكُمۡ لَعَلَّكُمۡ تَتَّقُونَ ۝١٨٣", "tr": "Ey iman edenler! Oruç, sizden öncekilere farz kılındığı gibi size de farz kılındı. Umulur ki korunursunuz.", "ref": "Bakara 2/183"}, "h": {"tr": "Allah Teâlâ buyurdu: “Âdemoğlunun her ameli kendisi içindir; ancak oruç müstesna. O bana aittir, mükâfatını da ben veririm.” … Oruçlunun iki sevinci vardır: İftar ettiğinde sevinir, Rabbine kavuştuğunda da orucundan dolayı sevinir.", "src": "Buhârî, Savm, 1904", "rav": "Ebû Hüreyre"}, "d": {"ar": "رَبَّنَآ إِنَّنَآ ءَامَنَّا فَٱغۡفِرۡ لَنَا ذُنُوبَنَا وَقِنَا عَذَابَ ٱلنَّارِ ۝١٦", "ok": "Rabbenâ innenâ âmennâ fağfir lenâ zünûbenâ ve kınâ azâbe'n-nâr.", "tr": "Rabbimiz! Biz iman ettik; günahlarımızı bağışla ve bizi ateş azabından koru.", "src": "Âl-i İmrân 3/16"}}, "ram2": {"t": "Ramazan", "n": "Oruç ayı; Kur'an'ın indirildiği ay.", "a": {"ar": "شَهۡرُ رَمَضَانَ ٱلَّذِيٓ أُنزِلَ فِيهِ ٱلۡقُرۡءَانُ هُدٗى لِّلنَّاسِ وَبَيِّنَٰتٖ مِّنَ ٱلۡهُدَىٰ وَٱلۡفُرۡقَانِ", "tr": "Ramazan ayı, insanlara yol gösterici, doğru yolun ve hakkı bâtıldan ayırmanın açık delilleri olarak Kur'an'ın indirildiği aydır.", "ref": "Bakara 2/185"}, "h": {"tr": "Kim inanarak ve karşılığını Allah'tan umarak Ramazan orucunu tutarsa, geçmiş günahları bağışlanır.", "src": "Buhârî, Îmân, 38; Müslim, Salâtü'l-müsâfirîn, 760", "rav": "Ebû Hüreyre"}, "d": {"ar": "رَبِّ ٱغۡفِرۡ وَٱرۡحَمۡ وَأَنتَ خَيۡرُ ٱلرَّـٰحِمِينَ ۝١١٨", "ok": "Rabbiğfir verham ve ente hayru'r-râhimîn.", "tr": "Rabbim! Bağışla, merhamet et. Sen merhamet edenlerin en hayırlısısın.", "src": "Mü'minûn 23/118"}}, "ram3": {"t": "Ramazan", "n": "Oruç ayı; Kur'an'ın indirildiği ay.", "a": {"ar": "وَإِذَا سَأَلَكَ عِبَادِي عَنِّي فَإِنِّي قَرِيبٌۖ أُجِيبُ دَعۡوَةَ ٱلدَّاعِ إِذَا دَعَانِۖ فَلۡيَسۡتَجِيبُواْ لِي وَلۡيُؤۡمِنُواْ بِي لَعَلَّهُمۡ يَرۡشُدُونَ ۝١٨٦", "tr": "Kullarım sana beni sorduklarında (söyle onlara): Ben çok yakınım. Bana dua ettiğinde dua edenin duasına karşılık veririm. O hâlde onlar da benim çağrıma uysunlar ve bana iman etsinler ki doğru yolu bulsunlar.", "ref": "Bakara 2/186"}, "h": {"tr": "Ramazan ayı girdiğinde gök kapıları açılır, cehennem kapıları kapanır ve şeytanlar zincire vurulur.", "src": "Buhârî, Savm, 1899", "rav": "Ebû Hüreyre"}, "d": {"ar": "رَبَّنَا هَبۡ لَنَا مِنۡ أَزۡوَٰجِنَا وَذُرِّيَّـٰتِنَا قُرَّةَ أَعۡيُنٖ وَٱجۡعَلۡنَا لِلۡمُتَّقِينَ إِمَامًا ۝٧٤", "ok": "Rabbenâ heb lenâ min ezvâcinâ ve zürriyyâtinâ kurrete a'yünin vec'alnâ li'l-müttekîne imâmâ.", "tr": "Rabbimiz! Bize eşlerimizden ve çocuklarımızdan göz aydınlığı olacak kimseler bağışla ve bizi takva sahiplerine önder kıl.", "src": "Furkân 25/74"}}, "ram4": {"t": "Ramazan'ın son on günü", "n": "Hz. Peygamber bu günlerde ibadetini artırır, Kadir gecesini arardı.", "a": {"ar": "وَبِٱلۡأَسۡحَارِ هُمۡ يَسۡتَغۡفِرُونَ ۝١٨", "tr": "Seher vakitlerinde de bağışlanma dilerlerdi.", "ref": "Zâriyât 51/18"}, "h": {"tr": "Ramazan'ın son on günü girdiğinde Peygamber (s.a.s.) kuşağını sıkıca bağlar (kendini ibadete verir), gecelerini ihya eder ve ailesini (ibadet için) uyandırırdı.", "src": "Buhârî, Fazlu leyleti'l-kadr, 2024; Müslim, İ'tikâf, 1174", "rav": "Hz. Âişe"}, "d": {"ar": "اللَّهُمَّ إِنَّكَ عَفُوٌّ كَرِيمٌ تُحِبُّ الْعَفْوَ فَاعْفُ عَنِّي", "ok": "Allâhümme inneke afüvvün kerîmün tühibbü'l-afve fa'fü annî.", "tr": "Allah'ım! Sen çok affedicisin, cömertsin; affetmeyi seversin. Beni de affet.", "src": "Tirmizî, Daavât, 3513 · Hz. Âişe'nin “Kadir gecesine denk gelirsem ne diyeyim?” sorusuna cevap. Tirmizî “hasen-sahih” demiştir."}}, "rbArefe": {"t": "Ramazan Bayramı Arefesi", "n": "Ramazan'ın son günü. Hz. Peygamber fitrenin bayram namazına çıkılmadan önce verilmesini emretmiştir.", "a": {"ar": "قَدۡ أَفۡلَحَ مَن تَزَكَّىٰ ۝١٤ وَذَكَرَ ٱسۡمَ رَبِّهِۦ فَصَلَّىٰ ۝١٥", "tr": "Arınan kimse gerçekten kurtuluşa ermiştir; Rabbinin adını anıp namaz kılan da.", "ref": "A'lâ 87/14-15"}, "h": {"tr": "Resûlullah köle ve hür, erkek ve kadın, küçük ve büyük her Müslümana fıtır sadakası olarak bir sâ' hurma veya bir sâ' arpa vermeyi farz kıldı ve insanlar bayram namazına çıkmadan önce verilmesini emretti.", "src": "Buhârî, Zekât, 1503", "rav": "Abdullah b. Ömer"}, "d": {"ar": "رَبِّ ٱجۡعَلۡنِي مُقِيمَ ٱلصَّلَوٰةِ وَمِن ذُرِّيَّتِيۚ رَبَّنَا وَتَقَبَّلۡ دُعَآءِ ۝٤٠", "ok": "Rabbi'c'alnî mukîme's-salâti ve min zürriyyetî, Rabbenâ ve tekabbel duâ.", "tr": "Rabbim! Beni ve neslimden gelenleri namazı dosdoğru kılanlardan eyle. Rabbimiz! Duamı kabul et.", "src": "İbrâhîm 14/40"}}, "rb1": {"t": "Ramazan Bayramı", "n": "Ramazan Bayramı'nın 1. günü. Bayramınız mübarek olsun.", "a": {"ar": "قُلۡ بِفَضۡلِ ٱللَّهِ وَبِرَحۡمَتِهِۦ فَبِذَٰلِكَ فَلۡيَفۡرَحُواْ هُوَ خَيۡرٞ مِّمَّا يَجۡمَعُونَ ۝٥٨", "tr": "De ki: Allah'ın lütfu ve rahmetiyle, yalnız bununla sevinsinler. Bu, onların biriktirdiklerinden daha hayırlıdır.", "ref": "Yûnus 10/58"}, "h": {"tr": "Resûlullah Ramazan Bayramı günü birkaç hurma yemeden (namaza) çıkmazdı. Hurmaları tek sayıda yerdi.", "src": "Buhârî, Îdeyn, 953", "rav": "Enes b. Mâlik"}, "d": {"ar": "رَبَّنَا تَقَبَّلۡ مِنَّآۖ إِنَّكَ أَنتَ ٱلسَّمِيعُ ٱلۡعَلِيمُ ۝١٢٧", "ok": "Rabbenâ tekabbel minnâ, inneke ente's-semîu'l-alîm.", "tr": "Rabbimiz! Bizden kabul buyur. Şüphesiz Sen hakkıyla işitensin, hakkıyla bilensin.", "src": "Bakara 2/127"}}, "rb2": {"t": "Ramazan Bayramı", "n": "Bayramınız mübarek olsun. Şevval ayında altı gün oruç tutmak sünnettir.", "a": {"ar": "وَلِتُكۡمِلُواْ ٱلۡعِدَّةَ وَلِتُكَبِّرُواْ ٱللَّهَ عَلَىٰ مَا هَدَىٰكُمۡ وَلَعَلَّكُمۡ تَشۡكُرُونَ ۝١٨٥", "tr": "(Allah,) sayıyı tamamlamanızı ve sizi doğru yola iletmesine karşılık O'nu tekbirle yüceltmenizi ister; umulur ki şükredersiniz.", "ref": "Bakara 2/185"}, "h": {"tr": "Kim Ramazan orucunu tutar, ardından Şevval'den altı gün daha oruç tutarsa, bütün yılı oruçla geçirmiş gibi olur.", "src": "Müslim, Sıyâm, 1164", "rav": "Ebû Eyyûb el-Ensârî"}, "d": {"ar": "رَبَّنَا ٱغۡفِرۡ لِي وَلِوَٰلِدَيَّ وَلِلۡمُؤۡمِنِينَ يَوۡمَ يَقُومُ ٱلۡحِسَابُ ۝٤١", "ok": "Rabbenağfir lî ve li-vâlideyye ve li'l-mü'minîne yevme yekûmü'l-hisâb.", "tr": "Rabbimiz! Hesabın görüleceği gün beni, anne babamı ve bütün mü'minleri bağışla.", "src": "İbrâhîm 14/41"}}, "zilhicce": {"t": "Zilhicce'nin ilk on günü", "n": "Yılın en faziletli günleri arasındadır.", "a": {"ar": "وَٱلۡفَجۡرِ ۝١ وَلَيَالٍ عَشۡرٖ ۝٢", "tr": "Fecre andolsun, on geceye andolsun. (Birçok müfessire göre Zilhicce'nin ilk on gecesi kastedilir.)", "ref": "Fecr 89/1-2"}, "h": {"tr": "Hiçbir günde yapılan amel, bu günlerde (Zilhicce'nin ilk on gününde) yapılan amelden daha faziletli değildir. “Cihad da mı?” dediler. “Cihad da değil; ancak canını ve malını tehlikeye atarak çıkıp hiçbirini geri getirmeyen kimse müstesna” buyurdu.", "src": "Buhârî, Îdeyn, 969", "rav": "Abdullah b. Abbâs"}, "d": {"ar": "لاَ إِلَهَ إِلاَّ اللَّهُ، وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهْوَ عَلَى كُلِّ شَىْءٍ قَدِيرٌ", "ok": "Lâ ilâhe illallâhü vahdehû lâ şerîke leh, lehü'l-mülkü ve lehü'l-hamdü ve hüve alâ külli şey'in kadîr.", "tr": "Allah'tan başka ilah yoktur; O tektir, ortağı yoktur. Mülk O'nundur, hamd O'na aittir. O her şeye gücü yetendir.", "src": "Buhârî, Daavât, 6403 · Günde yüz defa söyleyenin fazileti bildirilir."}}, "terviye": {"t": "Terviye Günü", "n": "Zilhicce'nin 8. günü; hacıların Arafat'a hazırlandığı gün.", "a": {"ar": "وَٱلۡفَجۡرِ ۝١ وَلَيَالٍ عَشۡرٖ ۝٢", "tr": "Fecre andolsun, on geceye andolsun. (Birçok müfessire göre Zilhicce'nin ilk on gecesi kastedilir.)", "ref": "Fecr 89/1-2"}, "h": {"tr": "Hiçbir günde yapılan amel, bu günlerde (Zilhicce'nin ilk on gününde) yapılan amelden daha faziletli değildir. “Cihad da mı?” dediler. “Cihad da değil; ancak canını ve malını tehlikeye atarak çıkıp hiçbirini geri getirmeyen kimse müstesna” buyurdu.", "src": "Buhârî, Îdeyn, 969", "rav": "Abdullah b. Abbâs"}, "d": {"ar": "لاَ إِلَهَ إِلاَّ اللَّهُ، وَحْدَهُ لاَ شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ، وَهْوَ عَلَى كُلِّ شَىْءٍ قَدِيرٌ", "ok": "Lâ ilâhe illallâhü vahdehû lâ şerîke leh, lehü'l-mülkü ve lehü'l-hamdü ve hüve alâ külli şey'in kadîr.", "tr": "Allah'tan başka ilah yoktur; O tektir, ortağı yoktur. Mülk O'nundur, hamd O'na aittir. O her şeye gücü yetendir.", "src": "Buhârî, Daavât, 6403 · Günde yüz defa söyleyenin fazileti bildirilir."}}, "kbArefe": {"t": "Kurban Bayramı Arefesi", "n": "Arefe günü; hacılar bugün Arafat'ta vakfe yapar. Teşrik tekbirleri bugün sabah namazından itibaren farz namazların ardından getirilir.", "a": {"ar": "ٱلۡيَوۡمَ أَكۡمَلۡتُ لَكُمۡ دِينَكُمۡ وَأَتۡمَمۡتُ عَلَيۡكُمۡ نِعۡمَتِي وَرَضِيتُ لَكُمُ ٱلۡإِسۡلَٰمَ دِينٗا", "tr": "Bugün size dininizi kemale erdirdim, üzerinizdeki nimetimi tamamladım ve size din olarak İslâm'ı beğendim. (Bu âyet Arefe günü inmiştir: Buhârî, Îmân, 45.)", "ref": "Mâide 5/3"}, "h": {"tr": "Allah'ın, Arefe gününden daha çok kulunu cehennemden azat ettiği bir gün yoktur.", "src": "Müslim, Hac, 1348", "rav": "Hz. Âişe"}, "d": {"ar": "رَبِّ أَوۡزِعۡنِيٓ أَنۡ أَشۡكُرَ نِعۡمَتَكَ ٱلَّتِيٓ أَنۡعَمۡتَ عَلَيَّ وَعَلَىٰ وَٰلِدَيَّ وَأَنۡ أَعۡمَلَ صَٰلِحٗا تَرۡضَىٰهُ وَأَصۡلِحۡ لِي فِي ذُرِّيَّتِيٓۖ إِنِّي تُبۡتُ إِلَيۡكَ وَإِنِّي مِنَ ٱلۡمُسۡلِمِينَ ۝١٥", "ok": "Rabbi evzi'nî en eşküra ni'metekelletî en'amte aleyye ve alâ vâlideyye ve en a'mele sâlihan terdâhü ve aslih lî fî zürriyyetî, innî tübtü ileyke ve innî mine'l-müslimîn.", "tr": "Rabbim! Bana ve anne babama verdiğin nimete şükretmemi ve razı olacağın salih amel işlememi bana ilham et; neslimi de benim için salih kıl. Şüphesiz ben Sana tövbe ettim ve ben Müslümanlardanım.", "src": "Ahkâf 46/15"}}, "kb1": {"t": "Kurban Bayramı", "n": "Kurban Bayramı'nın 1. günü. Bayramınız mübarek olsun.", "a": {"ar": "لَن يَنَالَ ٱللَّهَ لُحُومُهَا وَلَا دِمَآؤُهَا وَلَٰكِن يَنَالُهُ ٱلتَّقۡوَىٰ مِنكُمۡۚ كَذَٰلِكَ سَخَّرَهَا لَكُمۡ لِتُكَبِّرُواْ ٱللَّهَ عَلَىٰ مَا هَدَىٰكُمۡۗ وَبَشِّرِ ٱلۡمُحۡسِنِينَ ۝٣٧", "tr": "Onların ne etleri ne de kanları Allah'a ulaşır; fakat O'na sizin takvanız ulaşır. Sizi doğru yola iletmesine karşılık Allah'ı yüceltesiniz diye onları böylece emrinize verdi. İyilik yapanları müjdele.", "ref": "Hac 22/37"}, "h": {"tr": "Bu günümüzde ilk yapacağımız iş namaz kılmak, sonra dönüp kurban kesmektir. Kim böyle yaparsa sünnetimize uygun davranmış olur.", "src": "Buhârî, Edâhî, 5545", "rav": "Berâ b. Âzib"}, "d": {"ar": "قُلۡ إِنَّ صَلَاتِي وَنُسُكِي وَمَحۡيَايَ وَمَمَاتِي لِلَّهِ رَبِّ ٱلۡعَٰلَمِينَ ۝١٦٢ لَا شَرِيكَ لَهُۥۖ وَبِذَٰلِكَ أُمِرۡتُ وَأَنَا۠ أَوَّلُ ٱلۡمُسۡلِمِينَ ۝١٦٣", "ok": "Kul inne salâtî ve nusükî ve mahyâye ve memâtî lillâhi Rabbi'l-âlemîn. Lâ şerîke leh, ve bi-zâlike ümirtü ve ene evvelü'l-müslimîn.", "tr": "De ki: Şüphesiz namazım, kurbanım ve bütün ibadetlerim, hayatım ve ölümüm âlemlerin Rabbi Allah içindir. O'nun ortağı yoktur. Bana bu emredildi ve ben Müslümanların ilkiyim.", "src": "En'âm 6/162-163"}}, "kb2": {"t": "Kurban Bayramı · Teşrik günleri", "n": "Teşrik tekbirleri bayramın 4. günü ikindi namazına kadar farz namazların ardından getirilir.", "a": {"ar": "وَٱذۡكُرُواْ ٱللَّهَ فِيٓ أَيَّامٖ مَّعۡدُودَٰتٖ", "tr": "Sayılı günlerde Allah'ı anın.", "ref": "Bakara 2/203"}, "h": {"tr": "Teşrik günleri yeme ve içme günleridir.", "src": "Müslim, Sıyâm, 1141", "rav": "Nübeyşe el-Hüzelî"}, "d": {"ar": "رَبَّنَآ ءَاتِنَا فِي ٱلدُّنۡيَا حَسَنَةٗ وَفِي ٱلۡأٓخِرَةِ حَسَنَةٗ وَقِنَا عَذَابَ ٱلنَّارِ ۝٢٠١", "ok": "Rabbenâ âtinâ fi'd-dünyâ haseneten ve fi'l-âhireti haseneten ve kınâ azâbe'n-nâr.", "tr": "Rabbimiz! Bize dünyada da iyilik ver, ahirette de iyilik ver ve bizi ateş azabından koru.", "src": "Bakara 2/201 · Hz. Peygamber'in en çok yaptığı dua (Buhârî, Daavât, 6389)"}}, "hicri": {"t": "Hicrî Yılbaşı", "n": "Yeni hicrî yılın ilk günü. Hicrî takvim, Hz. Peygamber'in Mekke'den Medine'ye hicretini başlangıç alır.", "a": {"ar": "إِلَّا تَنصُرُوهُ فَقَدۡ نَصَرَهُ ٱللَّهُ إِذۡ أَخۡرَجَهُ ٱلَّذِينَ كَفَرُواْ ثَانِيَ ٱثۡنَيۡنِ إِذۡ هُمَا فِي ٱلۡغَارِ إِذۡ يَقُولُ لِصَٰحِبِهِۦ لَا تَحۡزَنۡ إِنَّ ٱللَّهَ مَعَنَا", "tr": "Siz ona yardım etmezseniz (bilin ki) Allah ona yardım etmişti. Hani inkâr edenler onu, iki kişiden biri olarak (Mekke'den) çıkarmışlardı. İkisi mağaradayken arkadaşına, “Üzülme, Allah bizimle beraberdir” diyordu.", "ref": "Tevbe 9/40"}, "h": {"tr": "Ameller ancak niyetlere göredir. Herkese niyet ettiği şey vardır. Kimin hicreti elde edeceği bir dünyalık ya da evleneceği bir kadın için ise, onun hicreti de hicret ettiği şeyedir.", "src": "Buhârî, Bed'ü'l-vahy, 1", "rav": "Ömer b. Hattâb"}, "d": {"ar": "رَبِّ أَدۡخِلۡنِي مُدۡخَلَ صِدۡقٖ وَأَخۡرِجۡنِي مُخۡرَجَ صِدۡقٖ وَٱجۡعَل لِّي مِن لَّدُنكَ سُلۡطَٰنٗا نَّصِيرٗا ۝٨٠", "ok": "Rabbi edhılnî müdhale sıdkın ve ahricnî muhrace sıdkın vec'al lî min ledünke sultânen nasîrâ.", "tr": "Rabbim! Gireceğim yere doğrulukla girmemi, çıkacağım yerden doğrulukla çıkmamı sağla ve katından bana yardımcı bir güç ver.", "src": "İsrâ 17/80 · Hicret sırasında öğretilen dua"}}, "asure": {"t": "Aşure Günü", "n": "Muharrem'in 10. günü. Hz. Peygamber bu gün oruç tutmuş, Muharrem'in 9. gününü de tutmayı arzu etmiştir (Müslim, Sıyâm, 1134).", "a": {"ar": "وَأَنجَيۡنَا مُوسَىٰ وَمَن مَّعَهُۥٓ أَجۡمَعِينَ ۝٦٥", "tr": "Mûsâ'yı ve beraberindekilerin hepsini kurtardık.", "ref": "Şuarâ 26/65"}, "h": {"tr": "Aşure günü orucunun, önceki bir yılın günahlarına kefaret olmasını Allah'tan umarım.", "src": "Müslim, Sıyâm, 1162", "rav": "Ebû Katâde el-Ensârî"}, "d": {"ar": "رَبِّ إِنِّي لِمَآ أَنزَلۡتَ إِلَيَّ مِنۡ خَيۡرٖ فَقِيرٞ ۝٢٤", "ok": "Rabbi innî limâ enzelte ileyye min hayrin fakîr.", "tr": "Rabbim! Bana indireceğin her hayra muhtacım.", "src": "Kasas 28/24 · Hz. Mûsâ'nın duası"}}}, "G": [{"t": "Zikir", "n": "", "a": {"ar": "فَٱذۡكُرُونِيٓ أَذۡكُرۡكُمۡ وَٱشۡكُرُواْ لِي وَلَا تَكۡفُرُونِ ۝١٥٢", "tr": "Öyleyse beni anın ki ben de sizi anayım. Bana şükredin, nankörlük etmeyin.", "ref": "Bakara 2/152"}, "h": {"tr": "Rabbini anan kimse ile anmayan kimsenin durumu, diri ile ölünün durumu gibidir.", "src": "Buhârî, Daavât, 6407", "rav": "Ebû Mûsâ el-Eş'arî"}, "d": {"ar": "رَبِّ زِدۡنِي عِلۡمٗا ۝١١٤", "ok": "Rabbi zidnî ilmâ.", "tr": "Rabbim! İlmimi artır.", "src": "Tâhâ 20/114"}}, {"t": "Anne baba", "n": "", "a": {"ar": "وَقَضَىٰ رَبُّكَ أَلَّا تَعۡبُدُوٓاْ إِلَّآ إِيَّاهُ وَبِٱلۡوَٰلِدَيۡنِ إِحۡسَٰنًاۚ إِمَّا يَبۡلُغَنَّ عِندَكَ ٱلۡكِبَرَ أَحَدُهُمَآ أَوۡ كِلَاهُمَا فَلَا تَقُل لَّهُمَآ أُفّٖ وَلَا تَنۡهَرۡهُمَا وَقُل لَّهُمَا قَوۡلٗا كَرِيمٗا ۝٢٣", "tr": "Rabbin, kendisinden başkasına kulluk etmemenizi ve anne babaya iyilik etmenizi kesin olarak emretti. Onlardan biri ya da ikisi senin yanında yaşlanırsa, onlara “öf” bile deme, onları azarlama; onlara güzel ve saygılı söz söyle.", "ref": "İsrâ 17/23"}, "h": {"tr": "Bir adam Resûlullah'a gelip “İyi davranmama en layık kimdir?” diye sordu. “Annen” buyurdu. “Sonra kim?” dedi. “Annen” buyurdu. “Sonra kim?” dedi. “Annen” buyurdu. “Sonra kim?” dedi. “Baban” buyurdu.", "src": "Buhârî, Edeb, 5971", "rav": "Ebû Hüreyre"}, "d": {"ar": "رَبِّ ٱرۡحَمۡهُمَا كَمَا رَبَّيَانِي صَغِيرٗا ۝٢٤", "ok": "Rabbirhamhümâ kemâ rabbeyânî sağîrâ.", "tr": "Rabbim! Onlar beni küçükken nasıl şefkatle yetiştirdilerse Sen de onlara öyle merhamet et.", "src": "İsrâ 17/24"}}, {"t": "Kardeşlik", "n": "", "a": {"ar": "إِنَّمَا ٱلۡمُؤۡمِنُونَ إِخۡوَةٞ فَأَصۡلِحُواْ بَيۡنَ أَخَوَيۡكُمۡۚ وَٱتَّقُواْ ٱللَّهَ لَعَلَّكُمۡ تُرۡحَمُونَ ۝١٠", "tr": "Mü'minler ancak kardeştir. Öyleyse kardeşlerinizin arasını düzeltin ve Allah'tan sakının ki size merhamet edilsin.", "ref": "Hucurât 49/10"}, "h": {"tr": "Sizden biriniz, kendisi için istediğini kardeşi için de istemedikçe (gerçek anlamda) iman etmiş olmaz.", "src": "Buhârî, Îmân, 13", "rav": "Enes b. Mâlik"}, "d": {"ar": "اللَّهُمَّ إِنِّي أَسْأَلُكَ الْهُدَى وَالتُّقَى وَالْعَفَافَ وَالْغِنَى", "ok": "Allâhümme innî es'elüke'l-hüdâ ve't-tükâ ve'l-afâfe ve'l-ğınâ.", "tr": "Allah'ım! Senden hidayet, takva, iffet ve gönül zenginliği isterim.", "src": "Müslim, Zikir, 2721"}}, {"t": "Tevekkül", "n": "", "a": {"ar": "وَمَن يَتَّقِ ٱللَّهَ يَجۡعَل لَّهُۥ مَخۡرَجٗا ۝٢ وَيَرۡزُقۡهُ مِنۡ حَيۡثُ لَا يَحۡتَسِبُۚ وَمَن يَتَوَكَّلۡ عَلَى ٱللَّهِ فَهُوَ حَسۡبُهُۥٓ", "tr": "Kim Allah'tan sakınırsa, Allah ona bir çıkış yolu açar ve onu hiç ummadığı yerden rızıklandırır. Kim Allah'a tevekkül ederse, O ona yeter.", "ref": "Talâk 65/2-3"}, "h": {"tr": "Mü'minin durumu ne hoştur! Her işi onun için hayırlıdır ve bu yalnızca mü'mine mahsustur. Ona bir sevinç ulaşırsa şükreder, bu onun için hayır olur; bir sıkıntı ulaşırsa sabreder, bu da onun için hayır olur.", "src": "Müslim, Zühd, 2999", "rav": "Suheyb er-Rûmî"}, "d": {"ar": "لَآ إِلَٰهَ إِلَّآ أَنتَ سُبۡحَٰنَكَ إِنِّي كُنتُ مِنَ ٱلظَّـٰلِمِينَ ۝٨٧", "ok": "Lâ ilâhe illâ ente sübhâneke innî küntü mine'z-zâlimîn.", "tr": "Senden başka ilah yoktur. Seni bütün eksikliklerden tenzih ederim. Gerçekten ben kendine zulmedenlerden oldum.", "src": "Enbiyâ 21/87 · Hz. Yûnus'un duası"}}, {"t": "Namaz", "n": "", "a": {"ar": "وَأَقِمِ ٱلصَّلَوٰةَۖ إِنَّ ٱلصَّلَوٰةَ تَنۡهَىٰ عَنِ ٱلۡفَحۡشَآءِ وَٱلۡمُنكَرِۗ وَلَذِكۡرُ ٱللَّهِ أَكۡبَرُ", "tr": "Namazı dosdoğru kıl. Şüphesiz namaz hayâsızlıktan ve kötülükten alıkoyar. Allah'ı anmak ise elbette en büyük (ibadet)tir.", "ref": "Ankebût 29/45"}, "h": {"tr": "“Birinizin kapısının önünde bir nehir olsa ve o kişi her gün orada beş defa yıkansa, üzerinde kirden bir şey kalır mı, ne dersiniz?” Sahâbîler “Kirinden hiçbir şey kalmaz” dediler. Bunun üzerine “İşte beş vakit namaz da böyledir; Allah onlarla günahları siler” buyurdu.", "src": "Buhârî, Mevâkît, 528; Müslim, Mesâcid, 667", "rav": "Ebû Hüreyre"}, "d": {"ar": "رَبِّ ٱجۡعَلۡنِي مُقِيمَ ٱلصَّلَوٰةِ وَمِن ذُرِّيَّتِيۚ رَبَّنَا وَتَقَبَّلۡ دُعَآءِ ۝٤٠", "ok": "Rabbi'c'alnî mukîme's-salâti ve min zürriyyetî, Rabbenâ ve tekabbel duâ.", "tr": "Rabbim! Beni ve neslimden gelenleri namazı dosdoğru kılanlardan eyle. Rabbimiz! Duamı kabul et.", "src": "İbrâhîm 14/40"}}, {"t": "Güzel ahlak", "n": "", "a": {"ar": "وَإِنَّكَ لَعَلَىٰ خُلُقٍ عَظِيمٖ ۝٤", "tr": "Ve şüphesiz sen yüce bir ahlak üzeresin.", "ref": "Kalem 68/4"}, "h": {"tr": "Sizin en hayırlılarınız, ahlakı en güzel olanlarınızdır.", "src": "Buhârî, Menâkıb, 3559", "rav": "Abdullah b. Amr"}, "d": {"ar": "اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْهَمِّ وَالْحَزَنِ، وَالْعَجْزِ وَالْكَسَلِ، وَالْجُبْنِ وَالْبُخْلِ، وَضَلَعِ الدَّيْنِ، وَغَلَبَةِ الرِّجَالِ", "ok": "Allâhümme innî eûzü bike mine'l-hemmi ve'l-hazen, ve'l-aczi ve'l-kesel, ve'l-cübni ve'l-buhl, ve dala'i'd-deyni ve ğalebeti'r-ricâl.", "tr": "Allah'ım! Kaygıdan ve hüzünden, acizlikten ve tembellikten, korkaklıktan ve cimrilikten, borç yükünden ve insanların baskısından Sana sığınırım.", "src": "Buhârî, Daavât, 6369"}}, {"t": "Kalp huzuru", "n": "", "a": {"ar": "ٱلَّذِينَ ءَامَنُواْ وَتَطۡمَئِنُّ قُلُوبُهُم بِذِكۡرِ ٱللَّهِۗ أَلَا بِذِكۡرِ ٱللَّهِ تَطۡمَئِنُّ ٱلۡقُلُوبُ ۝٢٨", "tr": "Onlar iman edenler ve kalpleri Allah'ı anmakla huzura kavuşanlardır. Bilin ki kalpler ancak Allah'ı anmakla huzur bulur.", "ref": "Ra'd 13/28"}, "h": {"tr": "İki söz vardır ki dile hafif, mizanda ağır, Rahmân'a sevimlidir: Sübhânallâhi ve bi-hamdihî, sübhânallâhi'l-azîm.", "src": "Buhârî, Eymân ve nüzûr, 6682", "rav": "Ebû Hüreyre"}, "d": {"ar": "رَبِّ ٱغۡفِرۡ وَٱرۡحَمۡ وَأَنتَ خَيۡرُ ٱلرَّـٰحِمِينَ ۝١١٨", "ok": "Rabbiğfir verham ve ente hayru'r-râhimîn.", "tr": "Rabbim! Bağışla, merhamet et. Sen merhamet edenlerin en hayırlısısın.", "src": "Mü'minûn 23/118"}}, {"t": "Dua", "n": "", "a": {"ar": "وَقَالَ رَبُّكُمُ ٱدۡعُونِيٓ أَسۡتَجِبۡ لَكُمۡ", "tr": "Rabbiniz şöyle buyurdu: Bana dua edin, size karşılık vereyim.", "ref": "Mü'min 40/60"}, "h": {"tr": "Rabbimiz her gece, gecenin son üçte biri kaldığında dünya semasına iner ve şöyle buyurur: “Bana dua eden yok mu, duasını kabul edeyim? Benden isteyen yok mu, ona vereyim? Benden bağışlanma dileyen yok mu, onu bağışlayayım?”", "src": "Buhârî, Teheccüd, 1145", "rav": "Ebû Hüreyre"}, "d": {"ar": "رَبَّنَا فَٱغۡفِرۡ لَنَا ذُنُوبَنَا وَكَفِّرۡ عَنَّا سَيِّـَٔاتِنَا وَتَوَفَّنَا مَعَ ٱلۡأَبۡرَارِ ۝١٩٣", "ok": "Rabbenâ fağfir lenâ zünûbenâ ve keffir annâ seyyiâtinâ ve teveffenâ mea'l-ebrâr.", "tr": "Rabbimiz! Günahlarımızı bağışla, kötülüklerimizi ört ve canımızı iyilerle birlikte al.", "src": "Âl-i İmrân 3/193"}}, {"t": "Sadaka", "n": "", "a": {"ar": "مَّثَلُ ٱلَّذِينَ يُنفِقُونَ أَمۡوَٰلَهُمۡ فِي سَبِيلِ ٱللَّهِ كَمَثَلِ حَبَّةٍ أَنۢبَتَتۡ سَبۡعَ سَنَابِلَ فِي كُلِّ سُنۢبُلَةٖ مِّاْئَةُ حَبَّةٖۗ وَٱللَّهُ يُضَٰعِفُ لِمَن يَشَآءُۚ وَٱللَّهُ وَٰسِعٌ عَلِيمٌ ۝٢٦١", "tr": "Mallarını Allah yolunda harcayanların durumu, yedi başak bitiren ve her başakta yüz tane bulunan bir tohum gibidir. Allah dilediğine kat kat verir. Allah'ın lütfu geniştir, O her şeyi bilendir.", "ref": "Bakara 2/261"}, "h": {"tr": "Sadaka maldan hiçbir şey eksiltmez. Allah, affeden kulun ancak şerefini artırır. Allah için alçak gönüllü olanı da Allah mutlaka yüceltir.", "src": "Müslim, Birr, 2588", "rav": "Ebû Hüreyre"}, "d": {"ar": "رَبِّ إِنِّي لِمَآ أَنزَلۡتَ إِلَيَّ مِنۡ خَيۡرٖ فَقِيرٞ ۝٢٤", "ok": "Rabbi innî limâ enzelte ileyye min hayrin fakîr.", "tr": "Rabbim! Bana indireceğin her hayra muhtacım.", "src": "Kasas 28/24 · Hz. Mûsâ'nın duası"}}, {"t": "Öfke ve affetmek", "n": "", "a": {"ar": "وَسَارِعُوٓاْ إِلَىٰ مَغۡفِرَةٖ مِّن رَّبِّكُمۡ وَجَنَّةٍ عَرۡضُهَا ٱلسَّمَٰوَٰتُ وَٱلۡأَرۡضُ أُعِدَّتۡ لِلۡمُتَّقِينَ ۝١٣٣ ٱلَّذِينَ يُنفِقُونَ فِي ٱلسَّرَّآءِ وَٱلضَّرَّآءِ وَٱلۡكَٰظِمِينَ ٱلۡغَيۡظَ وَٱلۡعَافِينَ عَنِ ٱلنَّاسِۗ وَٱللَّهُ يُحِبُّ ٱلۡمُحۡسِنِينَ ۝١٣٤", "tr": "Rabbinizin bağışlamasına ve genişliği göklerle yer kadar olan, takva sahipleri için hazırlanmış cennete koşun. Onlar bollukta da darlıkta da (Allah yolunda) harcayan, öfkelerini yutan ve insanları affeden kimselerdir. Allah iyilik yapanları sever.", "ref": "Âl-i İmrân 3/133-134"}, "h": {"tr": "Güçlü kimse, güreşte rakibini yenen değildir. Gerçek güçlü, öfke anında kendine hâkim olandır.", "src": "Buhârî, Edeb, 6114", "rav": "Ebû Hüreyre"}, "d": {"ar": "رَبَّنَآ ءَاتِنَا فِي ٱلدُّنۡيَا حَسَنَةٗ وَفِي ٱلۡأٓخِرَةِ حَسَنَةٗ وَقِنَا عَذَابَ ٱلنَّارِ ۝٢٠١", "ok": "Rabbenâ âtinâ fi'd-dünyâ haseneten ve fi'l-âhireti haseneten ve kınâ azâbe'n-nâr.", "tr": "Rabbimiz! Bize dünyada da iyilik ver, ahirette de iyilik ver ve bizi ateş azabından koru.", "src": "Bakara 2/201 · Hz. Peygamber'in en çok yaptığı dua (Buhârî, Daavât, 6389)"}}]}</script>
+<script>
+{
+const CITIES=[["Adana",37.00,35.32],["Adıyaman",37.76,38.28],["Afyonkarahisar",38.76,30.54],["Ağrı",39.72,43.05],["Aksaray",38.37,34.03],["Amasya",40.65,35.83],["Ankara",39.93,32.86],["Antalya",36.89,30.71],["Ardahan",41.11,42.70],["Artvin",41.18,41.82],["Aydın",37.85,27.85],["Balıkesir",39.65,27.88],["Bartın",41.64,32.34],["Batman",37.89,41.13],["Bayburt",40.26,40.23],["Bilecik",40.14,29.98],["Bingöl",38.88,40.50],["Bitlis",38.40,42.11],["Bolu",40.74,31.61],["Burdur",37.72,30.29],["Bursa",40.19,29.06],["Çanakkale",40.15,26.41],["Çankırı",40.60,33.61],["Çorum",40.55,34.95],["Denizli",37.78,29.09],["Diyarbakır",37.91,40.24],["Düzce",40.84,31.16],["Edirne",41.68,26.56],["Elazığ",38.68,39.22],["Erzincan",39.75,39.49],["Erzurum",39.90,41.27],["Eskişehir",39.78,30.52],["Gaziantep",37.07,37.38],["Giresun",40.91,38.39],["Gümüşhane",40.46,39.48],["Hakkari",37.58,43.74],["Hatay",36.20,36.16],["Iğdır",39.92,44.04],["Isparta",37.76,30.55],["İstanbul",41.01,28.98],["İzmir",38.42,27.14],["Kahramanmaraş",37.58,36.94],["Karabük",41.20,32.62],["Karaman",37.18,33.22],["Kars",40.60,43.10],["Kastamonu",41.38,33.78],["Kayseri",38.73,35.48],["Kilis",36.72,37.12],["Kırıkkale",39.85,33.52],["Kırklareli",41.73,27.22],["Kırşehir",39.15,34.16],["Kocaeli",40.77,29.92],["Konya",37.87,32.48],["Kütahya",39.42,29.98],["Malatya",38.35,38.31],["Manisa",38.61,27.43],["Mardin",37.31,40.74],["Mersin",36.80,34.63],["Muğla",37.22,28.36],["Muş",38.75,41.49],["Nevşehir",38.62,34.71],["Niğde",37.97,34.68],["Ordu",40.98,37.88],["Osmaniye",37.07,36.25],["Rize",41.03,40.52],["Sakarya",40.78,30.40],["Samsun",41.29,36.33],["Siirt",37.93,41.94],["Sinop",42.03,35.15],["Sivas",39.75,37.02],["Şanlıurfa",37.17,38.79],["Şırnak",37.52,42.46],["Tekirdağ",40.98,27.51],["Tokat",40.31,36.55],["Trabzon",41.00,39.72],["Tunceli",39.11,39.55],["Uşak",38.68,29.41],["Van",38.49,43.38],["Yalova",40.65,29.27],["Yozgat",39.82,34.81],["Zonguldak",41.45,31.79]].map(([n,lat,lng])=>({n,lat,lng,tz:3}));
+const DEF={n:"İstanbul",lat:41.01,lng:28.98,tz:3};
+const KAABA={lat:21.422487,lng:39.826206};
+const C=JSON.parse(document.getElementById("content").textContent);
+/* Diyanet dini günler takvimi 2026–2027 */
+const SPECIAL={"2026-01-15":"mirac","2026-02-02":"berat","2026-03-16":"kadir","2026-03-19":"rbArefe","2026-03-20":"rb1","2026-03-21":"rb2","2026-03-22":"rb2","2026-05-25":"terviye","2026-05-26":"kbArefe","2026-05-27":"kb1","2026-05-28":"kb2","2026-05-29":"kb2","2026-05-30":"kb2","2026-06-16":"hicri","2026-06-25":"asure","2026-08-24":"mevlid","2026-12-10":"regaib",
+"2027-01-04":"mirac","2027-01-22":"berat","2027-03-05":"kadir","2027-03-08":"rbArefe","2027-03-09":"rb1","2027-03-10":"rb2","2027-03-11":"rb2","2027-05-14":"terviye","2027-05-15":"kbArefe","2027-05-16":"kb1","2027-05-17":"kb2","2027-05-18":"kb2","2027-05-19":"kb2","2027-06-06":"hicri","2027-06-15":"asure","2027-08-13":"mevlid","2027-11-29":"ucaylar","2027-12-02":"regaib","2027-12-24":"mirac"};
+const KANDIL={regaib:1,mirac:1,berat:1,kadir:1,mevlid:1};
+const HM=["Muharrem","Safer","Rebîülevvel","Rebîülâhir","Cemâziyelevvel","Cemâziyelâhir","Receb","Şâban","Ramazan","Şevval","Zilkade","Zilhicce"];
+
+/* ---------- vakit hesabı (PrayTimes, Diyanet ayarları) ---------- */
+const rad=d=>d*Math.PI/180,deg=r=>r*180/Math.PI;
+const fix=(a,b)=>{a=a-b*Math.floor(a/b);return a<0?a+b:a};
+function sunPos(jd){const D=jd-2451545,g=fix(357.529+0.98560028*D,360),q=fix(280.459+0.98564736*D,360),
+ L=fix(q+1.915*Math.sin(rad(g))+0.020*Math.sin(rad(2*g)),360),e=23.439-0.00000036*D,
+ RA=deg(Math.atan2(Math.cos(rad(e))*Math.sin(rad(L)),Math.cos(rad(L))))/15,
+ eqt=q/15-fix(RA,24),decl=deg(Math.asin(Math.sin(rad(e))*Math.sin(rad(L))));return{decl,eqt}}
+function julian(y,m,d){if(m<=2){y-=1;m+=12}const A=Math.floor(y/100),B=2-A+Math.floor(A/4);
+ return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+B-1524.5}
+function prayerTimes(y,m,d,lat,lng,tz){
+ const jd=julian(y,m,d)-lng/(15*24);
+ const mid=t=>fix(12-sunPos(jd+t).eqt,24);
+ const ang=(a,t,ccw)=>{const dc=sunPos(jd+t).decl,n=mid(t);
+  const c=(-Math.sin(rad(a))-Math.sin(rad(dc))*Math.sin(rad(lat)))/(Math.cos(rad(dc))*Math.cos(rad(lat)));
+  const T=deg(Math.acos(Math.max(-1,Math.min(1,c))))/15;return n+(ccw?-T:T)};
+ const asr=t=>{const dc=sunPos(jd+t).decl,a=-deg(Math.atan(1/(1+Math.tan(rad(Math.abs(lat-dc))))));return ang(a,t)};
+ let t={imsak:5,gunes:6,ogle:12,ikindi:13,aksam:18,yatsi:18};
+ for(let i=0;i<2;i++){const p=Object.fromEntries(Object.entries(t).map(([k,v])=>[k,v/24]));
+  t={imsak:ang(18,p.imsak,1),gunes:ang(0.833,p.gunes,1),ogle:mid(p.ogle),ikindi:asr(p.ikindi),aksam:ang(0.833,p.aksam),yatsi:ang(17,p.yatsi)}}
+ const adj={imsak:0,gunes:-7,ogle:5,ikindi:4,aksam:7,yatsi:0};
+ const out={};for(const k in t)out[k]=t[k]+tz-lng/15+adj[k]/60;return out}
+
+/* ---------- kıble ---------- */
+function qibla(lat,lng){const p1=rad(lat),p2=rad(KAABA.lat),dl=rad(KAABA.lng-lng);
+ return fix(deg(Math.atan2(Math.sin(dl)*Math.cos(p2),Math.cos(p1)*Math.sin(p2)-Math.sin(p1)*Math.cos(p2)*Math.cos(dl))),360)}
+function distKm(a,b,c,d){const R=6371,x=rad(c-a),y=rad(d-b),h=Math.sin(x/2)**2+Math.cos(rad(a))*Math.cos(rad(c))*Math.sin(y/2)**2;return 2*R*Math.asin(Math.sqrt(h))}
+function sunAzAlt(y,m,d,hLocal,lat,lng,tz){const {decl,eqt}=sunPos(julian(y,m,d)+(hLocal-tz)/24);
+ const H=rad(15*(hLocal-tz+lng/15+eqt-12)),p=rad(lat),dc=rad(decl);
+ const alt=deg(Math.asin(Math.sin(p)*Math.sin(dc)+Math.cos(p)*Math.cos(dc)*Math.cos(H)));
+ const az=fix(deg(Math.atan2(Math.sin(H),Math.cos(H)*Math.sin(p)-Math.tan(dc)*Math.cos(p)))+180,360);return{az,alt}}
+function qiblaTime(y,m,d,c){const q=qibla(c.lat,c.lng);let prev=null;
+ for(let mi=180;mi<=1380;mi++){const s=sunAzAlt(y,m,d,mi/60,c.lat,c.lng,c.tz);
+  const diff=((s.az-q+540)%360)-180;
+  if(prev&&s.alt>2&&prev.alt>2&&Math.sign(diff)!==Math.sign(prev.diff)&&Math.abs(diff-prev.diff)<20)return mi;
+  prev={diff,alt:s.alt}}
+ return null}
+
+const $=id=>document.getElementById(id);
+const pad=n=>String(n).padStart(2,"0");
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const hm=mins=>pad(Math.floor(fix(mins,1440)/60))+":"+pad(fix(mins,1440)%60);
+
+let city=DEF,offset=0,lastKey="",tab="vakit",heading=null,saved=false;
+try{const s=JSON.parse(localStorage.getItem("nv-city")||"null");if(s&&isFinite(s.lat)&&isFinite(s.lng)&&isFinite(s.tz)){city=s;saved=true}}catch(e){}
+try{const t=localStorage.getItem("nv-tab");if(["vakit","gun","kible"].includes(t))tab=t}catch(e){}
+
+const localParts=ms=>{const d=new Date(ms+city.tz*3600000);return{y:d.getUTCFullYear(),m:d.getUTCMonth()+1,d:d.getUTCDate()}};
+const iso=p=>p.y+"-"+pad(p.m)+"-"+pad(p.d);
+function shift(p,n){const d=new Date(Date.UTC(p.y,p.m-1,p.d+n));return{y:d.getUTCFullYear(),m:d.getUTCMonth()+1,d:d.getUTCDate()}}
+function dayTimes(y,m,d){const h=prayerTimes(y,m,d,city.lat,city.lng,city.tz);const hj=hijri({y,m,d}),ram=hj&&hj.m===9;
+ return [["imsak","İmsak",ram?"Sahurun sonu · sabah namazı vakti":"Sabah namazı vakti"],["gunes","Güneş","Doğuş"],["ogle","Öğle",""],["ikindi","İkindi",""],["aksam","Akşam",ram?"İftar":""],["yatsi","Yatsı",""]]
+ .map(([k,label,sub])=>{const mins=Math.round(h[k]*60);return{k,label,sub,ms:Date.UTC(y,m-1,d)+(mins-city.tz*60)*60000,txt:hm(mins)}})}
+const fmtG=p=>new Date(Date.UTC(p.y,p.m-1,p.d,12)).toLocaleDateString("tr-TR",{weekday:"long",day:"numeric",month:"long",year:"numeric",timeZone:"UTC"});
+/* hicrî tarih: Umm al-Qura; Diyanet'ten ayrıldığı Ramazan 1447 başı düzeltildi */
+function hijri(p){const t=Date.UTC(p.y,p.m-1,p.d),D=86400000,r0=Date.UTC(2026,1,18);
+ if(t>=r0&&t<=Date.UTC(2026,2,19)){return t===r0?{d:30,m:8,y:1447}:{d:(t-r0)/D,m:9,y:1447}}
+ try{const parts=new Intl.DateTimeFormat("en-u-ca-islamic-umalqura-nu-latn",{day:"numeric",month:"numeric",year:"numeric",timeZone:"UTC"}).formatToParts(new Date(t+43200000));
+  const g=k=>parseInt((parts.find(x=>x.type===k)||{}).value,10);const o={d:g("day"),m:g("month"),y:g("year")};return isFinite(o.d)&&isFinite(o.m)?o:null}catch(e){return null}}
+const fmtH=h=>h?`${h.d} ${HM[h.m-1]} ${h.y}`:"";
+function dayContent(p){const key=SPECIAL[iso(p)];if(key)return{key,...C.S[key]};
+ const h=hijri(p);
+ if(h&&h.m===9)return h.d>=21?{key:"ram4",...C.S.ram4}:{key:"ram",...C.S["ram"+(1+h.d%3)],t:`Ramazan'ın ${h.d}. günü`};
+ if(h&&h.m===12&&h.d<=7)return{key:"zilhicce",...C.S.zilhicce};
+ const wd=new Date(Date.UTC(p.y,p.m-1,p.d)).getUTCDay();
+ if(wd===5)return{key:"cuma",...C.S.cuma};if(wd===1)return{key:"pzt",...C.S.pzt};if(wd===4)return{key:"prs",...C.S.prs};
+ const n=Math.floor(Date.UTC(p.y,p.m-1,p.d)/86400000);return{key:"g",...C.G[n%C.G.length]}}
+
+function renderHeader(now,today){
+ const tToday=dayTimes(today.y,today.m,today.d);
+ let next=tToday.find(x=>x.ms>now&&x.k!=="gunes")||tToday.find(x=>x.ms>now);
+ if(!next){const tm=shift(today,1);next=dayTimes(tm.y,tm.m,tm.d)[0]}
+ const s=Math.floor(Math.max(0,next.ms-now)/1000);
+ $("count").textContent=pad(Math.floor(s/3600))+":"+pad(Math.floor(s/60)%60)+":"+pad(s%60);
+ $("nextLbl").textContent=next.label+" vaktine kalan";$("nextAt").textContent=next.label+" "+next.txt;
+ return tToday}
+
+function render(){
+ const now=Date.now(),today=localParts(now),view=shift(today,offset);
+ const tToday=renderHeader(now,today);
+ let cur=null;for(const x of tToday)if(x.ms<=now)cur=x;if(cur&&cur.k==="gunes")cur=null;
+ const key=[city.n,city.lat,city.lng,city.tz,offset,cur?cur.k:"",iso(today),tab].join("|");
+ if(key===lastKey)return;const dayChanged=!lastKey.startsWith([city.n,city.lat,city.lng,city.tz,offset].join("|"))||!lastKey.includes(iso(today));lastKey=key;
+ $("cityName").textContent=city.n;document.title=city.n+" · Namaz Vakitleri";
+ $("gDate").textContent=fmtG(today);$("hDate").textContent=fmtH(hijri(today));
+ const tk=SPECIAL[iso(today)];$("chip").hidden=!tk;if(tk)$("chip").textContent=(KANDIL[tk]?"Bu gece ":"Bugün ")+C.S[tk].t;
+ for(const t of ["vakit","gun","kible"]){$("t-"+t).setAttribute("aria-selected",t===tab);$("p-"+t).hidden=t!==tab}
+ $("dayTitle").textContent=offset===0?"Bugün":offset===1?"Yarın":offset===-1?"Dün":fmtG(view).replace(/ \d{4}$/,"");
+ $("toToday").hidden=offset===0;
+ /* vakitler */
+ $("times").innerHTML=dayTimes(view.y,view.m,view.d).map(x=>{const c=offset===0&&cur&&cur.k===x.k?"cur":(offset===0&&x.ms<=now)||offset<0?"past":"";
+  return `<li class="${c}"><span class="n">${esc(x.label)}${x.sub?`<span class="s">${esc(x.sub)}</span>`:""}</span><span class="t">${x.txt}</span></li>`}).join("");
+ /* günün */
+ if(dayChanged||tab==="gun"){const c=dayContent(view);
+  const hv=hijri(view);
+  $("occ").innerHTML=c.n||c.key!=="g"?`<h3>${esc(c.t)}</h3><p>${esc(c.n||fmtH(hv))}</p>`:`<h3>${esc(c.t)}</h3><p>${esc(fmtH(hv))}</p>`;
+  $("aAr").textContent=c.a.ar;$("aTr").textContent=c.a.tr;$("aRef").innerHTML=`<b>${esc(c.a.ref)}</b>`;
+  $("hTr").textContent="“"+c.h.tr.replace(/^“|”$/g,"")+"”";$("hSrc").innerHTML=`${c.h.rav?esc(c.h.rav)+" rivayet etmiştir · ":""}<b>${esc(c.h.src)}</b>`;
+  $("dAr").textContent=c.d.ar;$("dOk").textContent=c.d.ok;$("dTr").textContent=c.d.tr;$("dSrc").innerHTML=`<b>${esc(c.d.src)}</b>`}
+ /* kıble */
+ const q=qibla(city.lat,city.lng);
+ $("qDeg").textContent=q.toFixed(1).replace(".",",")+"°";
+ $("qDist").textContent=Math.round(distKm(city.lat,city.lng,KAABA.lat,KAABA.lng)).toLocaleString("tr-TR")+" km";
+ const qt=qiblaTime(view.y,view.m,view.d,city);$("qTime").textContent=qt===null?"Yok":hm(qt);
+ $("needle").setAttribute("transform",`rotate(${q})`);
+ applyHeading();
+ $("how").innerHTML=[`Telefonunun pusula uygulamasını aç ve ${q.toFixed(0)}° yönüne dön.`,
+  qt===null?"Bugün güneş kıble yönüne gelmiyor; pusula yöntemini kullan.":`Ya da saat ${hm(qt)}'de güneşi tam karşına al: o an yüzün kıbleye dönüktür.`,
+  "Pusula sapıyorsa telefonu havada birkaç kez 8 çizerek kalibre et; metal eşyalardan ve mıknatıslı kılıflardan uzak tut."].map(t=>`<li>${esc(t)}</li>`).join("");
+}
+{const g=$("ticks");let s="";for(let a=0;a<360;a+=10){const L=a%30===0?12:6,r=rad(a);s+=`<line x1="${(128*Math.sin(r)).toFixed(1)}" y1="${(-128*Math.cos(r)).toFixed(1)}" x2="${((128-L)*Math.sin(r)).toFixed(1)}" y2="${(-(128-L)*Math.cos(r)).toFixed(1)}" stroke="var(--mute)" stroke-width="${a%30===0?2:1}"/>`}g.innerHTML=s}
+
+/* ---------- konum seçici ---------- */
+const norm=s=>s.toLocaleLowerCase("tr-TR").replace(/ı/g,"i").normalize("NFD").replace(/[̀-ͯ]/g,"");
+function drawList(){const q=norm($("q").value.trim());const hits=CITIES.filter(c=>norm(c.n).includes(q));
+ $("list").innerHTML=hits.length?hits.map(c=>`<li><button data-n="${esc(c.n)}" class="${c.n===city.n?"sel":""}">${esc(c.n)}</button></li>`).join(""):`<li class="empty">Sonuç yok. Aşağıdan koordinat girebilirsin.</li>`}
+function setCity(c,keepOpen){city=c;lastKey="";try{localStorage.setItem("nv-city",JSON.stringify(c))}catch(e){}if(!keepOpen)closeSheet();render()}
+function openSheet(){$("sheet").classList.add("open");$("q").value="";drawList();$("geoMsg").textContent="";
+ $("cLat").value=city.lat;$("cLng").value=city.lng;$("cTz").value=city.tz;$("cName").value="";$("cErr").textContent=""}
+function closeSheet(){$("sheet").classList.remove("open");$("cityBtn").focus()}
+function fromPosition(pos){const lat=+pos.coords.latitude.toFixed(4),lng=+pos.coords.longitude.toFixed(4);
+ let best=null,bd=1e9;for(const c of CITIES){const d=distKm(lat,lng,c.lat,c.lng);if(d<bd){bd=d;best=c}}
+ const tz=-new Date().getTimezoneOffset()/60;
+ return{n:bd<80?best.n+" · konumun":"Konumum",lat,lng,tz,auto:true}}
+function locate(silent){
+ const fail=m=>{if(!silent)$("geoMsg").textContent=m};
+ if(!navigator.geolocation)return fail("Bu tarayıcı konum paylaşmayı desteklemiyor. Şehrini listeden seçebilirsin.");
+ if(!silent)$("geoMsg").textContent="Konum alınıyor…";
+ try{navigator.geolocation.getCurrentPosition(pos=>{const c=fromPosition(pos);
+   if(silent&&saved&&!city.auto)return;
+   if(silent&&city.auto&&distKm(c.lat,c.lng,city.lat,city.lng)<3)return;
+   saved=true;setCity(c,silent)},
+  err=>fail(err&&err.code===1?"Konum izni kapalı. Açmak için Chrome'da adres çubuğundaki simgeye dokunup Konum iznini aç ya da şehrini listeden seç.":"Konum alınamadı. Şehrini listeden seçebilirsin."),
+  {timeout:15000,maximumAge:300000,enableHighAccuracy:false})}catch(e){fail("Konuma erişilemiyor. Şehrini listeden seçebilirsin.")}}
+$("cityBtn").addEventListener("click",openSheet);
+$("close").addEventListener("click",closeSheet);
+$("sheet").addEventListener("click",e=>{if(e.target===$("sheet"))closeSheet()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&$("sheet").classList.contains("open"))closeSheet()});
+$("q").addEventListener("input",drawList);
+$("q").addEventListener("keydown",e=>{if(e.key==="Enter"){const b=$("list").querySelector("button");if(b)b.click()}});
+$("list").addEventListener("click",e=>{const b=e.target.closest("button[data-n]");if(!b)return;const c=CITIES.find(x=>x.n===b.dataset.n);if(c)setCity(c)});
+$("geoBtn").addEventListener("click",()=>locate(false));
+$("cGo").addEventListener("click",()=>{const num=v=>parseFloat(String(v).replace(",","."));
+ const lat=num($("cLat").value),lng=num($("cLng").value),tz=num($("cTz").value);
+ if(!(Math.abs(lat)<=65))return $("cErr").textContent="Enlem -65 ile 65 arasında olmalı.";
+ if(!(Math.abs(lng)<=180))return $("cErr").textContent="Boylam -180 ile 180 arasında olmalı.";
+ if(!(Math.abs(tz)<=14))return $("cErr").textContent="UTC farkı -12 ile 14 arasında olmalı.";
+ setCity({n:$("cName").value.trim().slice(0,40)||`${lat.toFixed(2)}, ${lng.toFixed(2)}`,lat,lng,tz})});
+
+/* ---------- sekmeler, gün gezintisi ---------- */
+for(const t of ["vakit","gun","kible"])$("t-"+t).addEventListener("click",()=>{tab=t;try{localStorage.setItem("nv-tab",t)}catch(e){}render();if(t==="kible")startCompass(false)});
+$("prev").addEventListener("click",()=>{offset--;render()});
+$("nextDay").addEventListener("click",()=>{offset++;render()});
+$("toToday").addEventListener("click",()=>{offset=0;render()});
+
+/* ---------- canlı pusula ---------- */
+let gotEvent=false,started=false,absSeen=false,shown=null;
+function applyHeading(){const q=qibla(city.lat,city.lng);
+ if(heading===null){$("rose").style.transform="";$("phoneMark").hidden=true;$("qState").textContent="";$("qSub").textContent="Kuzeyden saat yönünde";$("p-kible").classList.remove("ok-q");return}
+ if(shown===null)shown=heading;else{const dlt=((heading-shown+540)%360)-180;shown=fix(shown+dlt*0.25,360)}
+ $("rose").style.transform=`rotate(${-shown}deg)`;$("phoneMark").hidden=false;
+ const off=((q-shown+540)%360)-180,ok=Math.abs(off)<=4;
+ $("p-kible").classList.toggle("ok-q",ok);
+ $("qSub").textContent="Telefonu düz tut, üst kenarını Kâbe işaretine çevir";
+ $("qState").textContent=ok?"Kıble yönündesin":(off>0?`${Math.round(off)}° sağa dön`:`${Math.round(-off)}° sola dön`)}
+function onOrient(e){let h=null;
+ if(typeof e.webkitCompassHeading==="number")h=e.webkitCompassHeading;
+ else if(e.type==="deviceorientationabsolute"&&typeof e.alpha==="number"){absSeen=true;h=360-e.alpha}
+ else if(!absSeen&&e.absolute===true&&typeof e.alpha==="number")h=360-e.alpha;
+ if(h===null)return;
+ const so=(screen.orientation&&screen.orientation.angle)||window.orientation||0;
+ heading=fix(h+so,360);gotEvent=true;$("liveBtn").hidden=true;$("liveMsg").textContent="";applyHeading()}
+async function startCompass(fromClick){
+ if(started&&gotEvent)return;
+ const needsPerm=typeof DeviceOrientationEvent!=="undefined"&&typeof DeviceOrientationEvent.requestPermission==="function";
+ if(!started){window.addEventListener("deviceorientationabsolute",onOrient);window.addEventListener("deviceorientation",onOrient);started=true}
+ if(fromClick&&needsPerm){try{const r=await DeviceOrientationEvent.requestPermission();if(r!=="granted"){$("liveMsg").textContent="Pusula izni verilmedi.";return}}catch(e){}}
+ setTimeout(()=>{if(gotEvent)return;$("liveBtn").hidden=false;
+  $("liveMsg").textContent=needsPerm&&!fromClick?"Pusulayı açmak için düğmeye dokun.":"Telefonun pusula sensörüne ulaşılamadı. Yukarıdaki açıyı kullan ya da kıble saatinde güneşe dön."},1500)}
+$("liveBtn").addEventListener("click",()=>startCompass(true));
+
+render();setInterval(render,1000);
+if(!saved||city.auto)locate(true);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden){lastKey="";render();if(city.auto)locate(true)}});
+if(tab==="kible")startCompass(false);
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+}
+</script>
+</body>
+</html>
