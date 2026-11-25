@@ -1,0 +1,59 @@
+name: Android APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Web dosyalarını uygulamaya kopyala
+        run: |
+          mkdir -p android/app/src/main/assets/www
+          cp -r index.html manifest.webmanifest sw.js fonts icons android/app/src/main/assets/www/
+
+      - name: İmza anahtarı (tanımlıysa)
+        env:
+          KS_B64: ${{ secrets.KS_B64 }}
+        run: |
+          if [ -n "$KS_B64" ]; then
+            echo "$KS_B64" | base64 -d > "$RUNNER_TEMP/namaz.jks"
+            echo "KS_PATH=$RUNNER_TEMP/namaz.jks" >> "$GITHUB_ENV"
+          fi
+
+      - name: APK derle
+        working-directory: android
+        env:
+          VERSION_CODE: ${{ github.run_number }}
+          KS_PASS: ${{ secrets.KS_PASS }}
+          KS_ALIAS: ${{ secrets.KS_ALIAS }}
+        run: gradle assembleRelease --no-daemon --stacktrace
+
+      - name: Dosyayı adlandır
+        run: cp android/app/build/outputs/apk/release/app-release.apk namaz-vakti.apk
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: Namaz Vakti 1.0.${{ github.run_number }}
+          make_latest: true
+          files: namaz-vakti.apk
+          body: |
+            Android için Namaz Vakti uygulaması.
+            Telefonunda bu sayfadan namaz-vakti.apk dosyasını indirip aç ve kur.
